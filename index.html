@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios Utesianos</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+</head>
+<body>
+
+<div class="app-layout">
+    <aside class="control-panel">
+        <h2>Gestión de Horario</h2>
+
+        <form id="schedule-form">
+            <div class="form-group">
+                <label for="materia-nombre">Nombre de Asignatura</label>
+                <input type="text" id="materia-nombre" placeholder="Ej. Programación II" required>
+            </div>
+            <div class="form-group">
+                <label for="materia-dia">Día de la Semana</label>
+                <select id="materia-dia" required>
+                    <option value="LUNES">Lunes</option>
+                    <option value="MARTES">Martes</option>
+                    <option value="MIÉRCOLES">Miércoles</option>
+                    <option value="JUEVES">Jueves</option>
+                    <option value="VIERNES">Viernes</option>
+                    <option value="SÁBADO">Sábado</option>
+                    <option value="VIRTUAL / SIN HORARIO FIJO">Virtual / Sin horario fijo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="materia-hora">Hora</label>
+                <input type="text" id="materia-hora" placeholder="Ej. 7:00 - 9:15 pm" required>
+            </div>
+            <div class="form-group">
+                <label for="materia-aula">Aula / Ubicación</label>
+                <input type="text" id="materia-aula" placeholder="Ej. B325" required>
+            </div>
+            <div class="form-group">
+                <label for="materia-modalidad">Modalidad</label>
+                <select id="materia-modalidad">
+                    <option value="Presencial">Presencial</option>
+                    <option value="Virtual">Virtual</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Agregar Asignatura</button>
+        </form>
+
+        <h2 style="margin-top: 24px;">Personalización de Color</h2>
+        <div class="form-group">
+            <label for="color-solid">Color Sólido</label>
+            <input type="color" id="color-solid" value="#0f172a" style="height: 40px; cursor: pointer;">
+        </div>
+
+        <h2 style="margin-top: 24px;">Personalización de Gradiente</h2>
+        <div class="form-group" style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+                <label for="grad-color1">Color 1</label>
+                <input type="color" id="grad-color1" value="#0f172a" style="height: 40px; cursor: pointer; width: 100%;">
+            </div>
+            <div style="flex: 1;">
+                <label for="grad-color2">Color 2</label>
+                <input type="color" id="grad-color2" value="#1e3a8a" style="height: 40px; cursor: pointer; width: 100%;">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="grad-direction">Dirección del Gradiente</label>
+            <select id="grad-direction">
+                <option value="135deg">Diagonal</option>
+                <option value="90deg">Horizontal</option>
+                <option value="0deg">Vertical</option>
+            </select>
+        </div>
+
+        <h2 style="margin-top: 24px;">Exportación</h2>
+        <button type="button" id="btn-export-img" class="btn btn-secondary">Descargar como Imagen (PNG)</button>
+    </aside>
+
+    <div class="schedule-preview-wrapper">
+        <div class="schedule-container" id="schedule-card">
+            <header class="schedule-header" id="schedule-header">
+                <h1 contenteditable="true" spellcheck="false" title="Haz clic para editar el título">HORARIO ACADÉMICO</h1>
+                <p contenteditable="true" spellcheck="false" title="Haz clic para editar la institución">Universidad Tecnológica de Santiago (UTESA)</p>
+            </header>
+
+            <main>
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 44%;">Asignatura</th>
+                            <th scope="col" style="width: 26%;">Hora</th>
+                            <th scope="col" style="width: 14%;">Aula</th>
+                            <th scope="col" style="width: 16%;">Modalidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </main>
+
+            <footer class="schedule-footer">
+                <p contenteditable="true" spellcheck="false" title="Haz clic para editar el pie de página">Horario generado para organización académica.</p>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
