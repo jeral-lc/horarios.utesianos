@@ -30,10 +30,28 @@
                     <option value="VIRTUAL / SIN HORARIO FIJO">Virtual / Sin horario fijo</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="materia-hora">Hora</label>
-                <input type="text" id="materia-hora" placeholder="Ej. 7:00 - 9:15 pm" required>
+
+            <!-- Nuevos campos estructurados de horario -->
+            <div id="horario-inputs-container">
+                <div class="form-group" style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label for="hora-inicio">Hora de Inicio</label>
+                        <input type="text" id="hora-inicio" placeholder="Ej. 7:00" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="hora-fin">Hora de Fin</label>
+                        <input type="text" id="hora-fin" placeholder="Ej. 9:15" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tanda">Tanda</label>
+                    <select id="tanda">
+                        <option value="pm">PM (Tarde/Noche)</option>
+                        <option value="am">AM (Mañana)</option>
+                    </select>
+                </div>
             </div>
+
             <div class="form-group">
                 <label for="materia-aula">Aula / Ubicación</label>
                 <input type="text" id="materia-aula" placeholder="Ej. B325" required>
