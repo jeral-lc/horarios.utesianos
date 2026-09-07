@@ -3,10 +3,12 @@
 :root {
     --bg-body: #f8fafc;
     --bg-panel: #ffffff;
+    --bg-card: #ffffff;
     --text-main: #1e293b;
     --text-label: #475569;
     --border-color: #cbd5e1;
     --input-bg: #ffffff;
+    --table-text: #1e293b;
     --footer-bg: #f8fafc;
     --footer-text: #64748b;
 }
@@ -14,10 +16,12 @@
 body.dark-mode {
     --bg-body: #0f172a;
     --bg-panel: #1e293b;
+    --bg-card: #1e293b;
     --text-main: #f8fafc;
     --text-label: #cbd5e1;
     --border-color: #475569;
     --input-bg: #0f172a;
+    --table-text: #f8fafc;
     --footer-bg: #1e293b;
     --footer-text: #94a3b8;
 }
@@ -56,6 +60,7 @@ body {
     color: var(--text-main);
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 8px;
+    transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 .form-group {
@@ -68,6 +73,7 @@ body {
     font-size: 8.5pt;
     margin-bottom: 4px;
     color: var(--text-label);
+    transition: color 0.3s ease;
 }
 
 .form-group input[type="text"],
@@ -80,7 +86,7 @@ body {
     outline: none;
     background-color: var(--input-bg);
     color: var(--text-main);
-    transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+    transition: border-color 0.2s, background-color 0.3s ease, color 0.3s ease;
 }
 
 .form-group input:disabled {
@@ -142,10 +148,11 @@ body {
 }
 
 .schedule-container {
-    background: white;
+    background: var(--bg-card);
     border-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     overflow: hidden;
+    transition: background-color 0.3s ease;
 }
 
 header.schedule-header {
@@ -195,7 +202,9 @@ main {
 table.schedule-table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
+    border-spacing: 0;
+    background: var(--bg-card);
+    transition: background-color 0.3s ease;
 }
 
 table.schedule-table th {
@@ -211,10 +220,11 @@ table.schedule-table th {
 
 table.schedule-table td {
     padding: 8px 14px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--border-color);
     font-size: 9.5pt;
     vertical-align: middle;
-    color: #1e293b;
+    color: var(--table-text);
+    transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 table.schedule-table tr:last-child td {
@@ -222,16 +232,18 @@ table.schedule-table tr:last-child td {
 }
 
 tr.day-header-row {
-    background-color: #cbd5e1 !important;
-    color: #0f172a;
+    background-color: var(--border-color) !important;
+    color: var(--text-main);
     font-weight: bold;
     font-size: 9.5pt;
-    border-top: 2px solid #94a3b8;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 tr.day-header-row td {
-    padding: 8px 14px;
-    color: #0f172a !important;
+    color: var(--text-main) !important;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .badge-presencial {
@@ -261,6 +273,7 @@ tr.day-header-row td {
     padding: 14px;
     background-color: var(--footer-bg);
     border-top: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .schedule-footer p {
