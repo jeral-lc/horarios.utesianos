@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const headerElement = document.getElementById('schedule-header');
 
     const selectDia = document.getElementById('materia-dia');
-    const inputHora = document.getElementById('materia-hora');
+    const horaInicioInput = document.getElementById('hora-inicio');
+    const horaFinInput = document.getElementById('hora-fin');
+    const tandaSelect = document.getElementById('tanda');
+    const horarioInputsContainer = document.getElementById('horario-inputs-container');
     const inputAula = document.getElementById('materia-aula');
 
     const colorSolid = document.getElementById('color-solid');
@@ -25,19 +28,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const diasOrden = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO", "VIRTUAL / SIN HORARIO FIJO"];
 
-    // Controlar campos de Hora y Aula según el día seleccionado
-    if (selectDia && inputHora && inputAula) {
+    // Controlar campos según el día seleccionado
+    if (selectDia) {
         selectDia.addEventListener('change', () => {
             if (selectDia.value === "VIRTUAL / SIN HORARIO FIJO") {
-                inputHora.value = "N/A";
-                inputHora.disabled = true;
-                inputAula.value = "N/A";
-                inputAula.disabled = true;
+                horarioInputsContainer.style.display = 'none';
+                horaInicioInput.required = false;
+                horaFinInput.required = false;
+                inputAula.value = "VIRTU";
             } else {
-                if (inputHora.value === "N/A") inputHora.value = "";
-                if (inputAula.value === "N/A") inputAula.value = "";
-                inputHora.disabled = false;
-                inputAula.disabled = false;
+                horarioInputsContainer.style.display = 'block';
+                horaInicioInput.required = true;
+                horaFinInput.required = true;
+                if (inputAula.value === "VIRTU") inputAula.value = "";
             }
         });
     }
@@ -50,15 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return yiq >= 128 ? '#0f172a' : '#ffffff';
     }
 
-    // Botón de Modo Oscuro
     if (btnDarkMode) {
         btnDarkMode.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
-            if (document.body.classList.contains('dark-mode')) {
-                btnDarkMode.textContent = '☀️ Modo Claro';
-            } else {
-                btnDarkMode.textContent = '🌙 Modo Oscuro';
-            }
+            btnDarkMode.textContent = document.body.classList.contains('dark-mode') ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
         });
     }
 
@@ -69,21 +67,47 @@ document.addEventListener('DOMContentLoaded', () => {
             const diaSeleccionado = selectDia.value;
             const esVirtualFijo = diaSeleccionado === "VIRTUAL / SIN HORARIO FIJO";
 
+            let horaFormateada = "Sin horario fijo";
+            let valorComparacionMinutos = 0;
+
+            if (!esVirtualFijo) {
+                const hInicio = horaInicioInput.value.trim();
+                const hFin = horaFinInput.value.trim();
+                const tnd = tandaSelect.value.toLowerCase();
+
+                horaFormateada = `${hInicio} a ${hFin} ${tnd}`;
+
+                // Convertir hora de inicio a minutos totales desde las 00:00 para ordenar perfecto
+                valorComparacionMinutos = parseTimeToMinutes(hInicio, tnd);
+            }
+
             const nuevaMateria = {
                 nombre: document.getElementById('materia-nombre').value.trim(),
                 dia: diaSeleccionado,
-                hora: esVirtualFijo ? "Sin horario fijo" : inputHora.value.trim(),
-                aula: esVirtualFijo ? "Virtual" : inputAula.value.trim(),
+                hora: horaFormateada,
+                minutosInicio: valorComparacionMinutos,
+                aula: inputAula.value.trim(),
                 modalidad: esVirtualFijo ? "Virtual" : document.getElementById('materia-modalidad').value
             };
 
             state.materias.push(nuevaMateria);
             renderSchedule();
             form.reset();
-
-            if (inputHora) inputHora.disabled = false;
-            if (inputAula) inputAula.disabled = false;
+            if (horarioInputsContainer) horarioInputsContainer.style.display = 'block';
         });
+    }
+
+    // Función auxiliar para convertir hora (ej. "7:00", "pm") a minutos numéricos y ordenar bien
+    function parseTimeToMinutes(timeStr, tanda) {
+        const parts = timeStr.split(':');
+        let hours = parseInt(parts[0]) || 0;
+        const minutes = parseInt(parts[1]) || 0;
+
+        // Ajuste AM/PM (formato 24h para comparación correcta)
+        if (tanda === 'pm' && hours < 12) hours += 12;
+        if (tanda === 'am' && hours === 12) hours = 0;
+
+        return (hours * 60) + minutes;
     }
 
     function renderSchedule() {
@@ -91,9 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '';
 
         diasOrden.forEach(dia => {
-            const materiasDelDia = state.materias.filter(m => m.dia === dia);
+            let materiasDelDia = state.materias.filter(m => m.dia === dia);
 
             if (materiasDelDia.length > 0) {
+                // Ordenar cronológicamente usando los minutos de inicio calculados
+                materiasDelDia.sort((a, b) => a.minutosInicio - b.minutosInicio);
+
                 const dayRow = document.createElement('tr');
                 dayRow.className = 'day-header-row';
                 dayRow.innerHTML = `<td colspan="4">${dia}</td>`;
